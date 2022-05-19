@@ -6,6 +6,8 @@ The snippets here would be using various languages JS, CF, PHP or might even be 
 ## Current progress
 ### Day1
 Starting small. A js snippet which takes in a phrase and writes it one by one on each key press as you type in the textarea. 
+### Day2
+A simple tic tac toe game with Vanilla JS 
 
 ## Plan for the next day: 
-Tic Tac Toe game in JS
+Todo list using Vanilla JS and store in localStorage

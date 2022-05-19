@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>To do</title>
+		<style>
+			.done {
+				text-decoration: line-through;
+			}
+			ul#list{
+				list-style-type: none;
+				padding-left: 0;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<ul id="list"></ul>
+			<input type="text" id="new-todo">
+		</div>
+	</body>
+
+	<script>
+		
+		var todos = [];
+		const list = document.getElementById('list');
+		const el = document.getElementById('new-todo');
+		el.addEventListener('keypress', addTodo);
+		
+		//initial load
+		displayTodos();
+
+		//display all todos
+		function displayTodos(){
+			
+			if( !todos.length ){
+				//get from local storage
+				ls = localStorage.getItem('todos');
+				todos = ( ls != null ) ? JSON.parse(ls) : [];
+			}
+
+			//clear previous data
+			list.innerHTML = '';
+
+			//add 
+			for( todo of todos ){
+				
+				let li = document.createElement('li');
+				li.setAttribute('data-id', todo.id );
+				
+				//create a checkbox
+				let check = document.createElement('input');
+				check.type = 'checkbox';
+				check.id = todo.id;
+				check.classList = 'todo-check';
+				check.setAttribute('onclick', `markComplete(${todo.id})`);
+
+				let label = document.createElement('label');
+				label.setAttribute('for', todo.id)
+				label.innerText = todo.name;
+		
+				li.classList = ( todo.complete ) ? 'done' : 'not-done';
+				check.checked = (todo.complete) ? true : false;
+				
+				li.appendChild(check);
+				li.appendChild(label);
+				list.appendChild( li );
+				
+			}
+		}
+
+		function addTodo(e){
+			
+			if (e.key == "Enter") {
+				todos.push({
+					id: Math.floor(new Date().getTime()),
+					name: el.value,
+					complete: false
+				});
+				el.value = '';
+				push();
+			}
+			
+		}
+
+		function markComplete(id){
+			
+			document.getElementById(id).checked = true;
+			for( todo of todos ){
+				if( todo.id == id ){
+					todo.complete = !todo.complete;
+				}
+			}
+			push();
+		}
+
+		function push(){
+			localStorage.setItem('todos', JSON.stringify(todos));
+			displayTodos();
+		}
+
+
+	</script>
+
+</html>
